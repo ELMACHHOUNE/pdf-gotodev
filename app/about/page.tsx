@@ -65,7 +65,7 @@ export default function About() {
 
       <FloatingNav navItems={navItems} />
 
-      <main className="container mx-auto px-4 py-20 md:py-32 relative z-10">
+      <main className="container mx-auto px-4 pt-32 pb-20 md:py-32 relative z-10">
         <div className="text-center max-w-4xl mx-auto mb-16 space-y-8">
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white">
             <span className="block text-slate-900 dark:text-white mb-2">

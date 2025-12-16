@@ -29,7 +29,8 @@ export const FloatingNav = ({
   useMotionValueEvent(scrollYProgress, "change", (current) => {
     // Check if current is not undefined and is a number
     if (typeof current === "number") {
-      let direction = current! - scrollYProgress.getPrevious()!;
+      const previous = scrollYProgress.getPrevious();
+      const direction = current - (previous ?? 0);
 
       if (scrollYProgress.get() < 0.05) {
         setVisible(true);
@@ -62,7 +63,7 @@ export const FloatingNav = ({
           className
         )}
       >
-        <div className="flex items-center gap-2 mr-4">
+        <Link href="/" className="flex items-center gap-2 mr-4">
           <Image
             src="/images/icon-for-dark.webp"
             alt="GoToDev Logo"
@@ -71,10 +72,10 @@ export const FloatingNav = ({
             className="h-8 w-auto object-contain"
             priority
           />
-        </div>
-        {navItems.map((navItem: any, idx: number) => (
+        </Link>
+        {navItems.map((navItem, idx: number) => (
           <Link
-            key={`link=${idx}`}
+            key={navItem.link}
             href={navItem.link}
             className={cn(
               "relative dark:text-neutral-50 items-center flex space-x-2 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 text-base font-medium"

@@ -56,14 +56,14 @@ export default function Home() {
 
       <FloatingNav navItems={navItems} />
 
-      <main className="container mx-auto px-4 py-20 md:py-32 relative z-10">
-        <div className="text-center max-w-4xl mx-auto mb-16 space-y-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50/80 backdrop-blur-sm text-blue-700 text-sm font-medium border border-blue-100 shadow-sm">
-            <ShieldCheck size={16} />
+      <main className="container mx-auto px-4 pt-32 pb-12 md:py-32 relative z-10">
+        <div className="text-center max-w-4xl mx-auto mb-12 md:mb-16 space-y-6 md:space-y-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-blue-50/80 backdrop-blur-sm text-blue-700 text-xs md:text-sm font-medium border border-blue-100 shadow-sm">
+            <ShieldCheck size={14} className="md:w-4 md:h-4" />
             <span>{t.hero.badge}</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white">
             <span className="block text-slate-900 dark:text-white mb-2">
               {t.hero.title_prefix}
             </span>
@@ -72,7 +72,7 @@ export default function Home() {
             </span>
           </h1>
 
-          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed px-4 md:px-0">
             {t.hero.description}
           </p>
         </div>

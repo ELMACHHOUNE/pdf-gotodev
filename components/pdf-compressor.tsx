@@ -327,7 +327,7 @@ export default function PdfCompressor() {
             animate={{ opacity: 1, y: 0 }}
             className="bg-white/50 dark:bg-neutral-900/50 backdrop-blur-xl rounded-3xl shadow-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden"
           >
-            <div className="p-8 bg-neutral-50/50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-800 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="p-6 md:p-8 bg-neutral-50/50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-800 flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
                 <h2 className="text-xl font-bold text-neutral-900 dark:text-white flex items-center gap-3">
                   <div className="p-2 bg-green-500/10 rounded-lg text-green-600 dark:text-green-400">
@@ -358,11 +358,11 @@ export default function PdfCompressor() {
                 </p>
               </div>
 
-              <div className="flex items-center gap-3 ml-14 md:ml-0">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 ml-0 md:ml-0">
                 <Button
                   onClick={clearAll}
                   variant="outline"
-                  className="border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300"
+                  className="border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300 w-full sm:w-auto"
                 >
                   {t.compressor.clear_all}
                 </Button>
@@ -371,7 +371,7 @@ export default function PdfCompressor() {
                   <Button
                     onClick={downloadAllZip}
                     disabled={isZipping}
-                    className="bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all"
+                    className="bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all w-full sm:w-auto"
                   >
                     {isZipping ? (
                       <Loader2 className="animate-spin mr-2" size={18} />
@@ -388,11 +388,11 @@ export default function PdfCompressor() {
               {completedFiles.map((file) => (
                 <div
                   key={file.id}
-                  className="p-6 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors flex items-center justify-between gap-4 group"
+                  className="p-4 md:p-6 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
                 >
-                  <div className="flex items-center gap-5 min-w-0">
+                  <div className="flex items-center gap-4 min-w-0">
                     <div
-                      className={`p-3 rounded-xl ${
+                      className={`p-3 rounded-xl shrink-0 ${
                         file.status === "error"
                           ? "bg-red-500/10 text-red-500"
                           : "bg-green-500/10 text-green-600 dark:text-green-400"
@@ -404,12 +404,12 @@ export default function PdfCompressor() {
                         <FileCheck size={24} />
                       )}
                     </div>
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-bold text-neutral-900 dark:text-white truncate">
                         {file.file.name}
                       </p>
                       {file.status === "success" ? (
-                        <div className="flex items-center gap-3 text-xs mt-1">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs mt-1">
                           <span className="text-neutral-400 line-through">
                             {formatBytes(file.originalSize)}
                           </span>
@@ -439,7 +439,7 @@ export default function PdfCompressor() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                  <div className="flex items-center gap-2 justify-end sm:justify-start w-full sm:w-auto opacity-100">
                     {file.status === "success" && (
                       <Button
                         variant="ghost"
