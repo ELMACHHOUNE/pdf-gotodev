@@ -1,77 +1,100 @@
+"use client";
 import PdfCompressor from "@/components/pdf-compressor";
-import { ShieldCheck, Zap, Lock } from "lucide-react";
+import {
+  ShieldCheck,
+  Zap,
+  Lock,
+  Home as HomeIcon,
+  User,
+  MessageSquare,
+} from "lucide-react";
+import { FloatingNav } from "@/components/ui/floating-navbar";
+import { BackgroundBeams } from "@/components/ui/background-beams";
+import { HoverEffect } from "@/components/ui/card-hover-effect";
+import { Footer } from "@/components/ui/footer";
 
 export default function Home() {
+  const navItems = [
+    {
+      name: "Home",
+      link: "/",
+      icon: <HomeIcon className="h-4 w-4 text-neutral-500 dark:text-white" />,
+    },
+    {
+      name: "About",
+      link: "/about",
+      icon: <User className="h-4 w-4 text-neutral-500 dark:text-white" />,
+    },
+    {
+      name: "Contact",
+      link: "/contact",
+      icon: (
+        <MessageSquare className="h-4 w-4 text-neutral-500 dark:text-white" />
+      ),
+    },
+  ];
+
+  const features = [
+    {
+      title: "Private & Secure",
+      description:
+        "Files are processed locally on your device. We never see, store, or transmit your documents.",
+      icon: <Lock size={28} />,
+    },
+    {
+      title: "Lightning Fast",
+      description:
+        "No upload or download times. Compression happens instantly using your browser's power.",
+      icon: <Zap size={28} />,
+    },
+    {
+      title: "Quality First",
+      description:
+        "Smart compression algorithms reduce file size while maintaining document clarity and readability.",
+      icon: <ShieldCheck size={28} />,
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-slate-50 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:16px_16px]">
-      <main className="container mx-auto px-4 py-16 md:py-24">
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-medium border border-blue-100 mb-4">
+    <div className="min-h-screen bg-slate-50 dark:bg-neutral-950 relative w-full">
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <BackgroundBeams />
+      </div>
+
+      <FloatingNav navItems={navItems} />
+
+      <main className="container mx-auto px-4 py-20 md:py-32 relative z-10">
+        <div className="text-center max-w-4xl mx-auto mb-16 space-y-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50/80 backdrop-blur-sm text-blue-700 text-sm font-medium border border-blue-100 shadow-sm">
             <ShieldCheck size={16} />
             <span>100% Client-Side • No Server Uploads</span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900">
-            Secure, Local <br className="hidden md:block" />
-            <span className="text-blue-600">PDF Compression</span>
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <span className="block text-slate-900 dark:text-white mb-2">
+              GoToDev
+            </span>
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-500">
+              PDF Compression
+            </span>
           </h1>
 
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
             Optimize your PDF files directly in your browser. Your documents
             never leave your device, ensuring maximum privacy and speed.
           </p>
         </div>
 
-        <PdfCompressor />
+        <div className="relative z-20">
+          <PdfCompressor />
+        </div>
 
-        <div className="mt-24 grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-4">
-              <Lock size={24} />
-            </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">
-              Private & Secure
-            </h3>
-            <p className="text-slate-600">
-              Files are processed locally on your device. We never see, store,
-              or transmit your documents.
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-4">
-              <Zap size={24} />
-            </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">
-              Lightning Fast
-            </h3>
-            <p className="text-slate-600">
-              No upload or download times. Compression happens instantly using
-              your browser's power.
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-4">
-              <ShieldCheck size={24} />
-            </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">
-              Quality Preserved
-            </h3>
-            <p className="text-slate-600">
-              Smart optimization reduces file size while maintaining document
-              readability and structure.
-            </p>
-          </div>
+        <div className="mt-32 max-w-6xl mx-auto">
+          <HoverEffect items={features} />
         </div>
       </main>
 
-      <footer className="py-8 text-center text-slate-500 text-sm">
-        <p>
-          © {new Date().getFullYear()} Secure PDF Compressor. Built with Next.js
-          & pdf-lib.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }

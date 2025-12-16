@@ -12,6 +12,7 @@ import {
   Download,
   Archive,
   Loader2,
+  ArrowDown,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { formatBytes } from "../utils/pdf-compression";
@@ -199,6 +200,11 @@ export default function PdfCompressor() {
     }
   };
 
+  const clearAll = () => {
+    setFiles([]);
+    setIsZipping(false);
+  };
+
   const activeFiles = files.filter(
     (f) => f.status === "queued" || f.status === "processing"
   );
@@ -207,28 +213,37 @@ export default function PdfCompressor() {
   );
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-8">
+    <div className="w-full max-w-5xl mx-auto space-y-8">
       {/* Upload Section */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="bg-white/50 dark:bg-neutral-900/50 backdrop-blur-xl rounded-3xl shadow-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden transition-all hover:shadow-2xl">
         <div
           {...getRootProps()}
-          className={`p-12 text-center cursor-pointer transition-all duration-200 ease-in-out ${
+          className={`p-16 text-center cursor-pointer transition-all duration-300 ease-in-out ${
             isDragActive
-              ? "bg-blue-50 border-2 border-blue-500 border-dashed"
-              : "hover:bg-slate-50 border-2 border-transparent hover:border-slate-200 border-dashed"
+              ? "bg-blue-500/10 border-2 border-blue-500 border-dashed"
+              : "hover:bg-neutral-100/50 dark:hover:bg-neutral-800/50 border-2 border-transparent hover:border-neutral-300 dark:hover:border-neutral-700 border-dashed"
           }`}
         >
           <input {...getInputProps()} />
-          <div className="flex flex-col items-center justify-center space-y-4">
-            <div className="p-4 bg-blue-100 rounded-full text-blue-600">
-              <UploadCloud size={40} />
+          <div className="flex flex-col items-center justify-center space-y-6">
+            <div
+              className={`p-6 rounded-2xl transition-colors duration-300 ${
+                isDragActive
+                  ? "bg-blue-500/20 text-blue-600 dark:text-blue-400"
+                  : "bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500"
+              }`}
+            >
+              <UploadCloud size={48} strokeWidth={1.5} />
             </div>
-            <div className="space-y-2">
-              <h3 className="text-xl font-semibold text-slate-900">
-                {isDragActive ? "Drop files here" : "Drop your PDFs here"}
+            <div className="space-y-3">
+              <h3 className="text-2xl font-bold text-neutral-900 dark:text-white">
+                {isDragActive
+                  ? "Drop files immediately"
+                  : "Drop your PDFs here"}
               </h3>
-              <p className="text-slate-500">
-                Upload up to 100 files. We'll compress them in the browser.
+              <p className="text-neutral-500 dark:text-neutral-400 text-lg max-w-md mx-auto">
+                Upload up to 100 files. We'll compress them securely in your
+                browser.
               </p>
             </div>
           </div>
@@ -242,48 +257,58 @@ export default function PdfCompressor() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="bg-white rounded-xl shadow-sm border border-slate-100 p-6"
+            className="bg-white/50 dark:bg-neutral-900/50 backdrop-blur-xl rounded-3xl shadow-xl border border-neutral-200 dark:border-neutral-800 p-8"
           >
-            <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-              <Loader2 className="animate-spin text-blue-500" size={20} />
-              Processing Queue ({activeFiles.length})
-            </h2>
-            <div className="space-y-3">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-neutral-900 dark:text-white flex items-center gap-3">
+                <div className="p-2 bg-blue-500/10 rounded-lg text-blue-600 dark:text-blue-400">
+                  <Loader2 className="animate-spin" size={24} />
+                </div>
+                Processing Queue
+                <span className="text-sm font-normal text-neutral-500 dark:text-neutral-400 ml-2 bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-full">
+                  {activeFiles.length} remaining
+                </span>
+              </h2>
+            </div>
+
+            <div className="space-y-4">
               {activeFiles.map((file) => (
                 <div
                   key={file.id}
-                  className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100"
+                  className="flex items-center justify-between p-4 bg-neutral-50/50 dark:bg-neutral-800/50 rounded-xl border border-neutral-200 dark:border-neutral-700"
                 >
-                  <div className="flex items-center gap-3 overflow-hidden">
-                    <FileText className="text-slate-400 shrink-0" size={20} />
+                  <div className="flex items-center gap-4 overflow-hidden">
+                    <div className="p-2 bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700 shadow-sm text-neutral-400 shrink-0">
+                      <FileText size={24} />
+                    </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-slate-700 truncate max-w-50 sm:max-w-xs">
+                      <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate max-w-50 sm:max-w-md">
                         {file.file.name}
                       </p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">
                         {formatBytes(file.originalSize)}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-6">
                     {file.status === "processing" && (
-                      <div className="w-24 h-2 bg-slate-200 rounded-full overflow-hidden">
+                      <div className="w-32 h-2 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-blue-500 transition-all duration-300"
+                          className="h-full bg-blue-600 dark:bg-blue-500 transition-all duration-300 ease-out"
                           style={{ width: `${file.progress}%` }}
                         />
                       </div>
                     )}
                     {file.status === "queued" && (
-                      <span className="text-xs font-medium text-slate-400 bg-slate-200 px-2 py-1 rounded">
+                      <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 bg-neutral-200/50 dark:bg-neutral-700/50 px-3 py-1 rounded-full">
                         Queued
                       </span>
                     )}
                     <button
                       onClick={() => removeFile(file.id)}
-                      className="text-slate-400 hover:text-red-500 transition-colors"
+                      className="text-neutral-400 hover:text-red-500 transition-colors p-1 hover:bg-red-500/10 rounded-lg"
                     >
-                      <X size={18} />
+                      <X size={20} />
                     </button>
                   </div>
                 </div>
@@ -299,76 +324,102 @@ export default function PdfCompressor() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-lg border border-green-100 overflow-hidden"
+            className="bg-white/50 dark:bg-neutral-900/50 backdrop-blur-xl rounded-3xl shadow-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden"
           >
-            <div className="p-6 bg-green-50/50 border-b border-green-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="p-8 bg-neutral-50/50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-800 flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
-                <h2 className="text-lg font-semibold text-green-900 flex items-center gap-2">
-                  <FileCheck className="text-green-600" size={20} />
-                  Completed Files (
-                  {completedFiles.filter((f) => f.status === "success").length})
+                <h2 className="text-xl font-bold text-neutral-900 dark:text-white flex items-center gap-3">
+                  <div className="p-2 bg-green-500/10 rounded-lg text-green-600 dark:text-green-400">
+                    <FileCheck size={24} />
+                  </div>
+                  Completed Files
+                  <span className="text-sm font-normal text-neutral-500 dark:text-neutral-400 ml-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 px-2 py-0.5 rounded-full">
+                    {
+                      completedFiles.filter((f) => f.status === "success")
+                        .length
+                    }{" "}
+                    done
+                  </span>
                 </h2>
-                <p className="text-sm text-green-700 mt-1">
-                  Total saved:{" "}
-                  {formatBytes(
-                    completedFiles.reduce(
-                      (acc, f) =>
-                        acc +
-                        (f.originalSize - (f.compressedSize || f.originalSize)),
-                      0
-                    )
-                  )}
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-2 font-medium ml-14">
+                  Total space saved:{" "}
+                  <span className="text-green-600 dark:text-green-400">
+                    {formatBytes(
+                      completedFiles.reduce(
+                        (acc, f) =>
+                          acc +
+                          (f.originalSize -
+                            (f.compressedSize || f.originalSize)),
+                        0
+                      )
+                    )}
+                  </span>
                 </p>
               </div>
-              {completedFiles.some((f) => f.status === "success") && (
+
+              <div className="flex items-center gap-3 ml-14 md:ml-0">
                 <Button
-                  onClick={downloadAllZip}
-                  disabled={isZipping}
-                  className="bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg transition-all"
+                  onClick={clearAll}
+                  variant="outline"
+                  className="border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300"
                 >
-                  {isZipping ? (
-                    <Loader2 className="animate-spin mr-2" size={18} />
-                  ) : (
-                    <Archive className="mr-2" size={18} />
-                  )}
-                  Download All as ZIP
+                  Clear All
                 </Button>
-              )}
+
+                {completedFiles.some((f) => f.status === "success") && (
+                  <Button
+                    onClick={downloadAllZip}
+                    disabled={isZipping}
+                    className="bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all"
+                  >
+                    {isZipping ? (
+                      <Loader2 className="animate-spin mr-2" size={18} />
+                    ) : (
+                      <Archive className="mr-2" size={18} />
+                    )}
+                    Download All (ZIP)
+                  </Button>
+                )}
+              </div>
             </div>
 
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-neutral-100 dark:divide-neutral-800">
               {completedFiles.map((file) => (
                 <div
                   key={file.id}
-                  className="p-4 hover:bg-slate-50 transition-colors flex items-center justify-between gap-4"
+                  className="p-6 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors flex items-center justify-between gap-4 group"
                 >
-                  <div className="flex items-center gap-4 min-w-0">
+                  <div className="flex items-center gap-5 min-w-0">
                     <div
-                      className={`p-2 rounded-lg ${
+                      className={`p-3 rounded-xl ${
                         file.status === "error"
-                          ? "bg-red-100 text-red-600"
-                          : "bg-green-100 text-green-600"
+                          ? "bg-red-500/10 text-red-500"
+                          : "bg-green-500/10 text-green-600 dark:text-green-400"
                       }`}
                     >
                       {file.status === "error" ? (
-                        <AlertCircle size={20} />
+                        <AlertCircle size={24} />
                       ) : (
-                        <FileCheck size={20} />
+                        <FileCheck size={24} />
                       )}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-slate-900 truncate">
+                      <p className="text-sm font-bold text-neutral-900 dark:text-white truncate">
                         {file.file.name}
                       </p>
                       {file.status === "success" ? (
-                        <div className="flex items-center gap-2 text-xs mt-0.5">
-                          <span className="text-slate-500 line-through">
+                        <div className="flex items-center gap-3 text-xs mt-1">
+                          <span className="text-neutral-400 line-through">
                             {formatBytes(file.originalSize)}
                           </span>
-                          <span className="text-green-600 font-medium">
+                          <ArrowDown
+                            size={12}
+                            className="text-neutral-300 dark:text-neutral-600"
+                          />
+                          <span className="text-green-600 dark:text-green-400 font-bold">
                             {formatBytes(file.compressedSize || 0)}
                           </span>
-                          <span className="text-green-600 bg-green-100 px-1.5 py-0.5 rounded text-[10px]">
+                          <span className="text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900/30 px-2 py-0.5 rounded-full text-[10px] font-bold">
                             -
                             {Math.round(
                               (1 -
@@ -380,27 +431,29 @@ export default function PdfCompressor() {
                           </span>
                         </div>
                       ) : (
-                        <p className="text-xs text-red-500">{file.error}</p>
+                        <p className="text-xs text-red-500 font-medium mt-1">
+                          {file.error}
+                        </p>
                       )}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-2 shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                     {file.status === "success" && (
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => downloadFile(file)}
-                        className="text-slate-600 hover:text-blue-600 hover:bg-blue-50"
+                        className="text-neutral-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                       >
-                        <Download size={18} />
+                        <Download size={20} />
                       </Button>
                     )}
                     <button
                       onClick={() => removeFile(file.id)}
-                      className="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+                      className="p-2 text-neutral-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-500/10"
                     >
-                      <X size={18} />
+                      <X size={20} />
                     </button>
                   </div>
                 </div>
