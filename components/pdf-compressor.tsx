@@ -226,7 +226,11 @@ export default function PdfCompressor() {
               : "hover:bg-neutral-100/50 dark:hover:bg-neutral-800/50 border-2 border-transparent hover:border-neutral-300 dark:hover:border-neutral-700 border-dashed"
           }`}
         >
-          <input {...getInputProps()} />
+          <input
+            {...getInputProps()}
+            aria-label="Upload PDF files"
+            title="Upload PDF files"
+          />
           <div className="flex flex-col items-center justify-center space-y-6">
             <div
               className={`p-6 rounded-2xl transition-colors duration-300 ${
@@ -238,11 +242,11 @@ export default function PdfCompressor() {
               <UploadCloud size={48} strokeWidth={1.5} />
             </div>
             <div className="space-y-3">
-              <h3 className="text-2xl font-bold text-neutral-900 dark:text-white">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">
                 {isDragActive
                   ? t.compressor.drop_active
                   : t.compressor.drop_inactive}
-              </h3>
+              </h2>
               <p className="text-neutral-500 dark:text-neutral-400 text-lg max-w-md mx-auto">
                 {t.compressor.drop_desc}
               </p>

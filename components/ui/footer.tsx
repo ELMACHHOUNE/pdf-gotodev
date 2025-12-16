@@ -34,9 +34,9 @@ export function Footer() {
               height={48}
               className="h-12 w-12 object-contain hidden dark:block"
             />
-            <h3 className="text-2xl font-bold text-neutral-900 dark:text-white">
+            <span className="text-2xl font-bold text-neutral-900 dark:text-white">
               GoToDev
-            </h3>
+            </span>
           </div>
 
           <p className="text-neutral-500 dark:text-neutral-400 max-w-md mb-8">
@@ -78,6 +78,7 @@ export function Footer() {
             <Link
               href="https://github.com/ELMACHHOUNE/pdf-gotodev"
               target="_blank"
+              aria-label="GitHub"
               className="text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors transform hover:scale-110"
             >
               <Github size={24} />
@@ -85,6 +86,7 @@ export function Footer() {
             <Link
               href="https://www.linkedin.com/company/gotodev-ma/"
               target="_blank"
+              aria-label="LinkedIn"
               className="text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors transform hover:scale-110"
             >
               <Linkedin size={24} />
@@ -92,6 +94,7 @@ export function Footer() {
             <Link
               href="https://www.instagram.com/gotodev.ma"
               target="_blank"
+              aria-label="Instagram"
               className="text-neutral-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors transform hover:scale-110"
             >
               <Instagram size={24} />
@@ -99,6 +102,7 @@ export function Footer() {
             <Link
               href="https://www.facebook.com/gotodev.ma"
               target="_blank"
+              aria-label="Facebook"
               className="text-neutral-400 hover:text-blue-800 dark:hover:text-blue-600 transition-colors transform hover:scale-110"
             >
               <Facebook size={24} />
@@ -106,6 +110,7 @@ export function Footer() {
             <Link
               href="https://wa.me/+212649455082"
               target="_blank"
+              aria-label="WhatsApp"
               className="text-neutral-400 hover:text-green-600 dark:hover:text-green-400 transition-colors transform hover:scale-110"
             >
               <MessageCircle size={24} />
