@@ -17,6 +17,7 @@ import {
 import { Button } from "./ui/button";
 import { formatBytes } from "../utils/pdf-compression";
 import JSZip from "jszip";
+import { useI18n } from "@/lib/i18n-context";
 
 type CompressionStatus = "queued" | "processing" | "success" | "error";
 
@@ -32,6 +33,7 @@ interface FileItem {
 }
 
 export default function PdfCompressor() {
+  const { t } = useI18n();
   const [files, setFiles] = useState<FileItem[]>([]);
   const [isZipping, setIsZipping] = useState(false);
 
@@ -238,12 +240,11 @@ export default function PdfCompressor() {
             <div className="space-y-3">
               <h3 className="text-2xl font-bold text-neutral-900 dark:text-white">
                 {isDragActive
-                  ? "Drop files immediately"
-                  : "Drop your PDFs here"}
+                  ? t.compressor.drop_active
+                  : t.compressor.drop_inactive}
               </h3>
               <p className="text-neutral-500 dark:text-neutral-400 text-lg max-w-md mx-auto">
-                Upload up to 100 files. We'll compress them securely in your
-                browser.
+                {t.compressor.drop_desc}
               </p>
             </div>
           </div>
@@ -264,9 +265,9 @@ export default function PdfCompressor() {
                 <div className="p-2 bg-blue-500/10 rounded-lg text-blue-600 dark:text-blue-400">
                   <Loader2 className="animate-spin" size={24} />
                 </div>
-                Processing Queue
+                {t.compressor.processing_queue}
                 <span className="text-sm font-normal text-neutral-500 dark:text-neutral-400 ml-2 bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-full">
-                  {activeFiles.length} remaining
+                  {activeFiles.length} {t.compressor.remaining}
                 </span>
               </h2>
             </div>
@@ -301,7 +302,7 @@ export default function PdfCompressor() {
                     )}
                     {file.status === "queued" && (
                       <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 bg-neutral-200/50 dark:bg-neutral-700/50 px-3 py-1 rounded-full">
-                        Queued
+                        {t.compressor.queued}
                       </span>
                     )}
                     <button
@@ -332,17 +333,17 @@ export default function PdfCompressor() {
                   <div className="p-2 bg-green-500/10 rounded-lg text-green-600 dark:text-green-400">
                     <FileCheck size={24} />
                   </div>
-                  Completed Files
+                  {t.compressor.completed_files}
                   <span className="text-sm font-normal text-neutral-500 dark:text-neutral-400 ml-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 px-2 py-0.5 rounded-full">
                     {
                       completedFiles.filter((f) => f.status === "success")
                         .length
                     }{" "}
-                    done
+                    {t.compressor.done}
                   </span>
                 </h2>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-2 font-medium ml-14">
-                  Total space saved:{" "}
+                  {t.compressor.total_saved}{" "}
                   <span className="text-green-600 dark:text-green-400">
                     {formatBytes(
                       completedFiles.reduce(
@@ -363,7 +364,7 @@ export default function PdfCompressor() {
                   variant="outline"
                   className="border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300"
                 >
-                  Clear All
+                  {t.compressor.clear_all}
                 </Button>
 
                 {completedFiles.some((f) => f.status === "success") && (
@@ -377,7 +378,7 @@ export default function PdfCompressor() {
                     ) : (
                       <Archive className="mr-2" size={18} />
                     )}
-                    Download All (ZIP)
+                    {t.compressor.download_all}
                   </Button>
                 )}
               </div>

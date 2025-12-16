@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "hero": {
+    "badge": "100% Client-Side • No Server Uploads",
+    "title_prefix": "GoToDev",
+    "title_gradient": "PDF Compression",
+    "description": "Optimize your PDF files directly in your browser. Your documents never leave your device, ensuring maximum privacy and speed."
+  },
+  "features": {
+    "secure": {
+      "title": "Private & Secure",
+      "description": "Files are processed locally on your device. We never see, store, or transmit your documents."
+    },
+    "fast": {
+      "title": "Lightning Fast",
+      "description": "No upload or download times. Compression happens instantly using your browser's power."
+    },
+    "quality": {
+      "title": "Quality First",
+      "description": "Smart compression algorithms reduce file size while maintaining document clarity and readability."
+    }
+  },
+  "footer": {
+    "description": "Secure, client-side PDF compression tool. Your files never leave your device.",
+    "product": "Our Tools",
+    "resources": "Resources",
+    "legal": "Legal",
+    "rights": "All rights reserved."
+  },
+  "about": {
+    "title": "About GoToDev",
+    "subtitle": "Innovating for Developers",
+    "description": "GoToDev is a startup dedicated to building powerful, accessible solutions. With over 10+ tools and solutions, we empower developers and creators to build better and faster.",
+    "ecosystem": "Our Ecosystem",
+    "tools": {
+      "toolkit": "A comprehensive collection of developer tools and utilities in one place.",
+      "converter": "Convert images between various formats quickly and efficiently.",
+      "remover": "Remove backgrounds from images automatically using AI.",
+      "blur": "Generate beautiful CSS blur effects and glassmorphism styles."
+    }
+  },
+  "compressor": {
+    "drop_active": "Drop files immediately",
+    "drop_inactive": "Drop your PDFs here",
+    "drop_desc": "Upload up to 100 files. We'll compress them securely in your browser.",
+    "processing_queue": "Processing Queue",
+    "remaining": "remaining",
+    "queued": "Queued",
+    "completed_files": "Completed Files",
+    "done": "done",
+    "total_saved": "Total space saved:",
+    "clear_all": "Clear All",
+    "download_all": "Download All (ZIP)"
+  }
+}

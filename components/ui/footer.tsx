@@ -4,7 +4,11 @@ import { Github, Twitter, Linkedin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
+import { useI18n } from "@/lib/i18n-context";
+
 export function Footer() {
+  const { t } = useI18n();
+
   return (
     <footer className="bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 relative z-20">
       <div className="container mx-auto px-4 py-12">
@@ -23,8 +27,7 @@ export function Footer() {
               </h3>
             </div>
             <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-xs">
-              Secure, client-side PDF compression tool. Your files never leave
-              your device.
+              {t.footer.description}
             </p>
             <div className="flex space-x-4">
               <Link
@@ -50,7 +53,7 @@ export function Footer() {
 
           <div>
             <h4 className="font-semibold text-neutral-900 dark:text-white mb-4">
-              Our Tools
+              {t.footer.product}
             </h4>
             <ul className="space-y-2 text-sm text-neutral-500 dark:text-neutral-400">
               <li>
@@ -94,7 +97,7 @@ export function Footer() {
 
           <div>
             <h4 className="font-semibold text-neutral-900 dark:text-white mb-4">
-              Resources
+              {t.footer.resources}
             </h4>
             <ul className="space-y-2 text-sm text-neutral-500 dark:text-neutral-400">
               <li>
@@ -126,7 +129,7 @@ export function Footer() {
 
           <div>
             <h4 className="font-semibold text-neutral-900 dark:text-white mb-4">
-              Legal
+              {t.footer.legal}
             </h4>
             <ul className="space-y-2 text-sm text-neutral-500 dark:text-neutral-400">
               <li>
@@ -150,7 +153,9 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800 text-center text-sm text-neutral-500 dark:text-neutral-400">
-          <p>© {new Date().getFullYear()} GoToDev. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} GoToDev. {t.footer.rights}
+          </p>
         </div>
       </div>
     </footer>

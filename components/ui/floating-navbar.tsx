@@ -9,6 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
+import { LanguageToggle } from "./language-toggle";
 
 export const FloatingNav = ({
   navItems,
@@ -83,6 +84,7 @@ export const FloatingNav = ({
             <span className="hidden sm:block">{navItem.name}</span>
           </Link>
         ))}
+        <LanguageToggle />
       </motion.div>
     </AnimatePresence>
   );

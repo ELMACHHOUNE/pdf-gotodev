@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "contact": "Contact"
+  },
+  "hero": {
+    "badge": "100% Côté Client • Aucun Téléchargement Serveur",
+    "title_prefix": "GoToDev",
+    "title_gradient": "Compression PDF",
+    "description": "Optimisez vos fichiers PDF directement dans votre navigateur. Vos documents ne quittent jamais votre appareil, garantissant une confidentialité et une rapidité maximales."
+  },
+  "features": {
+    "secure": {
+      "title": "Privé & Sécurisé",
+      "description": "Les fichiers sont traités localement sur votre appareil. Nous ne voyons, ne stockons ni ne transmettons jamais vos documents."
+    },
+    "fast": {
+      "title": "Ultra Rapide",
+      "description": "Pas de temps de téléchargement. La compression se fait instantanément en utilisant la puissance de votre navigateur."
+    },
+    "quality": {
+      "title": "Qualité Avant Tout",
+      "description": "Des algorithmes de compression intelligents réduisent la taille du fichier tout en maintenant la clarté et la lisibilité du document."
+    }
+  },
+  "footer": {
+    "description": "Outil de compression PDF sécurisé côté client. Vos fichiers ne quittent jamais votre appareil.",
+    "product": "Nos Outils",
+    "resources": "Ressources",
+    "legal": "Légal",
+    "rights": "Tous droits réservés."
+  },
+  "about": {
+    "title": "À propos de GoToDev",
+    "subtitle": "Innover pour les Développeurs",
+    "description": "GoToDev est une startup dédiée à la création de solutions puissantes et accessibles. Avec plus de 10 outils et solutions, nous permettons aux développeurs et créateurs de construire mieux et plus vite.",
+    "ecosystem": "Notre Écosystème",
+    "tools": {
+      "toolkit": "Une collection complète d'outils et d'utilitaires pour développeurs en un seul endroit.",
+      "converter": "Convertissez des images entre différents formats rapidement et efficacement.",
+      "remover": "Supprimez automatiquement les arrière-plans des images grâce à l'IA.",
+      "blur": "Générez de magnifiques effets de flou CSS et des styles glassmorphism."
+    }
+  },
+  "compressor": {
+    "drop_active": "Déposez les fichiers immédiatement",
+    "drop_inactive": "Déposez vos PDF ici",
+    "drop_desc": "Téléchargez jusqu'à 100 fichiers. Nous les compresserons en toute sécurité dans votre navigateur.",
+    "processing_queue": "File de traitement",
+    "remaining": "restant",
+    "queued": "En attente",
+    "completed_files": "Fichiers terminés",
+    "done": "terminé",
+    "total_saved": "Espace total économisé :",
+    "clear_all": "Tout effacer",
+    "download_all": "Tout télécharger (ZIP)"
+  }
+}

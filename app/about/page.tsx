@@ -12,21 +12,24 @@ import {
   Eraser,
   Code,
 } from "lucide-react";
+import { useI18n } from "@/lib/i18n-context";
 
 export default function About() {
+  const { t } = useI18n();
+
   const navItems = [
     {
-      name: "Home",
+      name: t.nav.home,
       link: "/",
       icon: <HomeIcon className="h-4 w-4 text-neutral-500 dark:text-white" />,
     },
     {
-      name: "About",
+      name: t.nav.about,
       link: "/about",
       icon: <User className="h-4 w-4 text-neutral-500 dark:text-white" />,
     },
     {
-      name: "Contact",
+      name: t.nav.contact,
       link: "/contact",
       icon: (
         <MessageSquare className="h-4 w-4 text-neutral-500 dark:text-white" />
@@ -37,28 +40,25 @@ export default function About() {
   const tools = [
     {
       title: "Toolkit Hub",
-      description:
-        "A comprehensive collection of developer tools and utilities in one place.",
+      description: t.about.tools.toolkit,
       link: "https://toolkit-hub.gotodev.ma/",
       icon: <Wrench size={28} />,
     },
     {
       title: "Image Converter",
-      description:
-        "Convert images between various formats quickly and efficiently.",
+      description: t.about.tools.converter,
       link: "https://imgconvert.gotodev.ma/",
       icon: <ImageIcon size={28} />,
     },
     {
       title: "Background Remover",
-      description: "Remove backgrounds from images automatically using AI.",
+      description: t.about.tools.remover,
       link: "http://background.gotodev.ma/",
       icon: <Eraser size={28} />,
     },
     {
       title: "BlurCSS",
-      description:
-        "Generate beautiful CSS blur effects and glassmorphism styles.",
+      description: t.about.tools.blur,
       link: "https://blurcss.gotodev.ma/",
       icon: <Code size={28} />,
     },
@@ -76,23 +76,21 @@ export default function About() {
         <div className="text-center max-w-4xl mx-auto mb-16 space-y-8">
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white">
             <span className="block text-slate-900 dark:text-white mb-2">
-              About GoToDev
+              {t.about.title}
             </span>
             <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-500">
-              Innovating for Developers
+              {t.about.subtitle}
             </span>
           </h1>
 
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            GoToDev is a startup dedicated to building powerful, accessible
-            solutions. With over 10+ tools and solutions, we empower developers
-            and creators to build better and faster.
+            {t.about.description}
           </p>
         </div>
 
         <div className="mt-16 max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-slate-900 dark:text-white mb-12">
-            Our Ecosystem
+            {t.about.ecosystem}
           </h2>
           <HoverEffect items={tools} />
         </div>
