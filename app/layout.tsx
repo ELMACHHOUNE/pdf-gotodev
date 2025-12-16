@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { GoToDevButton } from "@/components/ui/gotodev-button";
 
 export const metadata: Metadata = {
   title: "GoToDev - PDF Compression",
@@ -13,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={``}>{children}</body>
+      <body className={``}>
+        {children}
+        <GoToDevButton />
+      </body>
     </html>
   );
 }

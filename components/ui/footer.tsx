@@ -2,17 +2,27 @@
 import React from "react";
 import { Github, Twitter, Linkedin } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   return (
-    <footer className="bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800">
+    <footer className="bg-white dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 relative z-20">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-neutral-900 dark:text-white">
-              GoToDev
-            </h3>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+            <div className="flex items-center gap-2">
+              <Image
+                src="/images/icon-for-dark.webp"
+                alt="GoToDev Logo"
+                width={40}
+                height={40}
+                className="h-10 w-10 object-contain"
+              />
+              <h3 className="text-xl font-bold text-neutral-900 dark:text-white">
+                GoToDev
+              </h3>
+            </div>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-xs">
               Secure, client-side PDF compression tool. Your files never leave
               your device.
             </p>
@@ -40,31 +50,43 @@ export function Footer() {
 
           <div>
             <h4 className="font-semibold text-neutral-900 dark:text-white mb-4">
-              Product
+              Our Tools
             </h4>
             <ul className="space-y-2 text-sm text-neutral-500 dark:text-neutral-400">
               <li>
                 <Link
-                  href="#"
+                  href="https://toolkit-hub.gotodev.ma/"
                   className="hover:text-blue-600 dark:hover:text-blue-400"
+                  target="_blank"
                 >
-                  Features
+                  Toolkit Hub
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="https://imgconvert.gotodev.ma/"
                   className="hover:text-blue-600 dark:hover:text-blue-400"
+                  target="_blank"
                 >
-                  Pricing
+                  Image Converter
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="http://background.gotodev.ma/"
                   className="hover:text-blue-600 dark:hover:text-blue-400"
+                  target="_blank"
                 >
-                  API
+                  Background Remover
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="https://blurcss.gotodev.ma/"
+                  className="hover:text-blue-600 dark:hover:text-blue-400"
+                  target="_blank"
+                >
+                  BlurCSS
                 </Link>
               </li>
             </ul>

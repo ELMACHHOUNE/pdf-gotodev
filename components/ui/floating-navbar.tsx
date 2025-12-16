@@ -63,7 +63,7 @@ export const FloatingNav = ({
       >
         <div className="flex items-center gap-2 mr-4">
           <Image
-            src="/images/logo.webp"
+            src="/images/icon-for-dark.webp"
             alt="GoToDev Logo"
             width={120}
             height={40}
