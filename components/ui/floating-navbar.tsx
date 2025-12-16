@@ -66,7 +66,7 @@ export const FloatingNav = ({
       >
         <Link href="/" className="flex items-center gap-2 mr-4">
           <Image
-            src="/images/logo.webp"
+            src="/images/icon.webp"
             alt="GoToDev Logo"
             width={120}
             height={40}
@@ -74,7 +74,7 @@ export const FloatingNav = ({
             priority
           />
           <Image
-            src="/images/logo-dark.webp"
+            src="/images/icon-for-dark.webp"
             alt="GoToDev Logo"
             width={120}
             height={40}
