@@ -6,125 +6,162 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   UploadCloud,
   FileCheck,
-  ArrowDown,
-  RefreshCw,
   AlertCircle,
+  FileText,
+  X,
+  Download,
+  Archive,
+  Loader2,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { formatBytes } from "../utils/pdf-compression";
+import JSZip from "jszip";
 
-type CompressionStatus = "idle" | "compressing" | "success" | "error";
+type CompressionStatus = "queued" | "processing" | "success" | "error";
 
-interface CompressionStats {
+interface FileItem {
+  id: string;
+  file: File;
+  status: CompressionStatus;
+  progress: number;
+  compressedBlob?: Blob;
   originalSize: number;
-  compressedSize: number;
+  compressedSize?: number;
+  error?: string;
 }
 
 export default function PdfCompressor() {
-  const [file, setFile] = useState<File | null>(null);
-  const [status, setStatus] = useState<CompressionStatus>("idle");
-  const [progress, setProgress] = useState(0);
-  const [compressedPdf, setCompressedPdf] = useState<Blob | null>(null);
-  const [stats, setStats] = useState<CompressionStats | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [files, setFiles] = useState<FileItem[]>([]);
+  const [isZipping, setIsZipping] = useState(false);
+
+  // Concurrency limit
+  const MAX_CONCURRENT = 3;
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    const selectedFile = acceptedFiles[0];
-    if (selectedFile && selectedFile.type === "application/pdf") {
-      setFile(selectedFile);
-      startCompression(selectedFile);
-    } else {
-      setErrorMessage("Please upload a valid PDF file.");
-      setStatus("error");
-    }
+    const newFiles = acceptedFiles
+      .filter((file) => file.type === "application/pdf")
+      .map((file) => ({
+        id: Math.random().toString(36).substring(7),
+        file,
+        status: "queued" as CompressionStatus,
+        progress: 0,
+        originalSize: file.size,
+      }));
+
+    setFiles((prev) => [...prev, ...newFiles]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      "application/pdf": [".pdf"],
-    },
-    multiple: false,
+    accept: { "application/pdf": [".pdf"] },
+    multiple: true,
   });
 
-  const startCompression = async (fileToCompress: File) => {
-    setStatus("compressing");
-    setProgress(0);
-    setErrorMessage("");
+  // Queue Processor
+  useEffect(() => {
+    const processingCount = files.filter(
+      (f) => f.status === "processing"
+    ).length;
+    const queuedFiles = files.filter((f) => f.status === "queued");
 
-    // Simulate progress for better UX since the actual operation might be too fast or blocking
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 90) {
-          clearInterval(progressInterval);
-          return 90;
-        }
-        return prev + 5;
-      });
-    }, 100);
-
-    try {
-      // Give the UI a moment to show the starting state
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      const worker = new Worker(
-        new URL("../utils/pdf.worker.ts", import.meta.url)
-      );
-
-      worker.onmessage = (e) => {
-        const { type, blob, error } = e.data;
-        if (type === "success") {
-          clearInterval(progressInterval);
-          setProgress(100);
-
-          // Small delay to show 100%
-          setTimeout(() => {
-            setCompressedPdf(blob);
-            setStats({
-              originalSize: fileToCompress.size,
-              compressedSize: blob.size,
-            });
-            setStatus("success");
-            worker.terminate();
-          }, 500);
-        } else if (type === "error") {
-          console.error("Compression failed (worker response):", e.data);
-          const errorMsg = error || "Unknown error occurred in worker";
-          setErrorMessage("Failed to compress PDF. " + errorMsg);
-          setStatus("error");
-          clearInterval(progressInterval);
-          worker.terminate();
-        } else {
-          // Ignore internal messages from pdfjs-dist or other libraries
-          console.log("Ignored worker message:", e.data);
-        }
-      };
-
-      worker.onerror = (error) => {
-        console.error("Worker error:", error);
-        setErrorMessage("An unexpected error occurred during compression.");
-        setStatus("error");
-        clearInterval(progressInterval);
-        worker.terminate();
-      };
-
-      worker.postMessage(fileToCompress);
-    } catch (error) {
-      console.error("Compression failed:", error);
-      setErrorMessage(
-        "Failed to compress PDF. The file might be corrupted or password protected."
-      );
-      setStatus("error");
-      clearInterval(progressInterval);
+    if (processingCount < MAX_CONCURRENT && queuedFiles.length > 0) {
+      const nextFile = queuedFiles[0];
+      processFile(nextFile);
     }
+  }, [files]);
+
+  const processFile = async (item: FileItem) => {
+    // Update status to processing
+    setFiles((prev) =>
+      prev.map((f) =>
+        f.id === item.id ? { ...f, status: "processing", progress: 5 } : f
+      )
+    );
+
+    const worker = new Worker(
+      new URL("../utils/pdf.worker.ts", import.meta.url)
+    );
+
+    // Progress simulation
+    const progressInterval = setInterval(() => {
+      setFiles((prev) =>
+        prev.map((f) => {
+          if (
+            f.id === item.id &&
+            f.status === "processing" &&
+            f.progress < 90
+          ) {
+            return { ...f, progress: f.progress + 5 };
+          }
+          return f;
+        })
+      );
+    }, 200);
+
+    worker.onmessage = (e) => {
+      const { type, blob, error } = e.data;
+      if (type === "success") {
+        clearInterval(progressInterval);
+        setFiles((prev) =>
+          prev.map((f) =>
+            f.id === item.id
+              ? {
+                  ...f,
+                  status: "success",
+                  progress: 100,
+                  compressedBlob: blob,
+                  compressedSize: blob.size,
+                }
+              : f
+          )
+        );
+        worker.terminate();
+      } else if (type === "error") {
+        clearInterval(progressInterval);
+        setFiles((prev) =>
+          prev.map((f) =>
+            f.id === item.id
+              ? {
+                  ...f,
+                  status: "error",
+                  error: error || "Compression failed",
+                }
+              : f
+          )
+        );
+        worker.terminate();
+      }
+    };
+
+    worker.onerror = () => {
+      clearInterval(progressInterval);
+      setFiles((prev) =>
+        prev.map((f) =>
+          f.id === item.id
+            ? {
+                ...f,
+                status: "error",
+                error: "Worker error",
+              }
+            : f
+        )
+      );
+      worker.terminate();
+    };
+
+    worker.postMessage(item.file);
   };
 
-  const handleDownload = () => {
-    if (compressedPdf && file) {
-      const url = URL.createObjectURL(compressedPdf);
+  const removeFile = (id: string) => {
+    setFiles((prev) => prev.filter((f) => f.id !== id));
+  };
+
+  const downloadFile = (item: FileItem) => {
+    if (item.compressedBlob) {
+      const url = URL.createObjectURL(item.compressedBlob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `compressed-${file.name}`;
+      link.download = `compressed-${item.file.name}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -132,192 +169,246 @@ export default function PdfCompressor() {
     }
   };
 
-  const reset = () => {
-    setFile(null);
-    setStatus("idle");
-    setProgress(0);
-    setCompressedPdf(null);
-    setStats(null);
-    setErrorMessage("");
+  const downloadAllZip = async () => {
+    setIsZipping(true);
+    const zip = new JSZip();
+    const completedFiles = files.filter(
+      (f) => f.status === "success" && f.compressedBlob
+    );
+
+    completedFiles.forEach((f) => {
+      if (f.compressedBlob) {
+        zip.file(`compressed-${f.file.name}`, f.compressedBlob);
+      }
+    });
+
+    try {
+      const content = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(content);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "compressed-pdfs.zip";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Failed to zip", err);
+    } finally {
+      setIsZipping(false);
+    }
   };
 
-  return (
-    <div className="w-full max-w-2xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden border border-slate-100">
-      <div className="p-8">
-        <AnimatePresence mode="wait">
-          {status === "idle" && (
-            <motion.div
-              key="idle"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="text-center"
-            >
-              <div
-                {...getRootProps()}
-                className={`border-2 border-dashed rounded-xl p-12 cursor-pointer transition-all duration-200 ease-in-out ${
-                  isDragActive
-                    ? "border-blue-500 bg-blue-50"
-                    : "border-slate-200 hover:border-blue-400 hover:bg-slate-50"
-                }`}
-              >
-                <input {...getInputProps()} />
-                <div className="flex flex-col items-center justify-center space-y-4">
-                  <div className="p-4 bg-blue-100 rounded-full text-blue-600">
-                    <UploadCloud size={40} />
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="text-xl font-semibold text-slate-900">
-                      Drop your PDF here
-                    </h3>
-                    <p className="text-slate-500">or click to browse files</p>
-                  </div>
-                  <p className="text-xs text-slate-400 mt-4">
-                    Maximum file size: 50MB • PDF only
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          )}
+  const activeFiles = files.filter(
+    (f) => f.status === "queued" || f.status === "processing"
+  );
+  const completedFiles = files.filter(
+    (f) => f.status === "success" || f.status === "error"
+  );
 
-          {status === "compressing" && (
-            <motion.div
-              key="compressing"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="text-center py-12"
-            >
-              <div className="mb-8 relative w-24 h-24 mx-auto">
-                <svg className="w-full h-full" viewBox="0 0 100 100">
-                  <circle
-                    className="text-slate-100 stroke-current"
-                    strokeWidth="8"
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    fill="transparent"
-                  ></circle>
-                  <circle
-                    className="text-blue-600 progress-ring__circle stroke-current transition-all duration-300 ease-in-out"
-                    strokeWidth="8"
-                    strokeLinecap="round"
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    fill="transparent"
-                    strokeDasharray="251.2"
-                    strokeDashoffset={251.2 - (251.2 * progress) / 100}
-                    transform="rotate(-90 50 50)"
-                  ></circle>
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center text-sm font-bold text-slate-700">
-                  {Math.round(progress)}%
-                </div>
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-2">
-                Compressing PDF...
+  return (
+    <div className="w-full max-w-4xl mx-auto space-y-8">
+      {/* Upload Section */}
+      <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+        <div
+          {...getRootProps()}
+          className={`p-12 text-center cursor-pointer transition-all duration-200 ease-in-out ${
+            isDragActive
+              ? "bg-blue-50 border-2 border-blue-500 border-dashed"
+              : "hover:bg-slate-50 border-2 border-transparent hover:border-slate-200 border-dashed"
+          }`}
+        >
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center justify-center space-y-4">
+            <div className="p-4 bg-blue-100 rounded-full text-blue-600">
+              <UploadCloud size={40} />
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold text-slate-900">
+                {isDragActive ? "Drop files here" : "Drop your PDFs here"}
               </h3>
               <p className="text-slate-500">
-                Stripping unused metadata and optimizing structure
+                Upload up to 100 files. We'll compress them in the browser.
               </p>
-            </motion.div>
-          )}
+            </div>
+          </div>
+        </div>
+      </div>
 
-          {status === "success" && stats && (
-            <motion.div
-              key="success"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-center"
-            >
-              <div className="flex flex-col items-center justify-center mb-8">
-                <div className="p-4 bg-green-100 rounded-full text-green-600 mb-4">
-                  <FileCheck size={40} />
+      {/* Active Queue */}
+      <AnimatePresence>
+        {activeFiles.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="bg-white rounded-xl shadow-sm border border-slate-100 p-6"
+          >
+            <h2 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+              <Loader2 className="animate-spin text-blue-500" size={20} />
+              Processing Queue ({activeFiles.length})
+            </h2>
+            <div className="space-y-3">
+              {activeFiles.map((file) => (
+                <div
+                  key={file.id}
+                  className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100"
+                >
+                  <div className="flex items-center gap-3 overflow-hidden">
+                    <FileText className="text-slate-400 shrink-0" size={20} />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-slate-700 truncate max-w-50 sm:max-w-xs">
+                        {file.file.name}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {formatBytes(file.originalSize)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    {file.status === "processing" && (
+                      <div className="w-24 h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-blue-500 transition-all duration-300"
+                          style={{ width: `${file.progress}%` }}
+                        />
+                      </div>
+                    )}
+                    {file.status === "queued" && (
+                      <span className="text-xs font-medium text-slate-400 bg-slate-200 px-2 py-1 rounded">
+                        Queued
+                      </span>
+                    )}
+                    <button
+                      onClick={() => removeFile(file.id)}
+                      className="text-slate-400 hover:text-red-500 transition-colors"
+                    >
+                      <X size={18} />
+                    </button>
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">
-                  Ready to Download!
-                </h3>
-                <p className="text-slate-500">
-                  Your PDF has been successfully compressed.
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Completed Section */}
+      <AnimatePresence>
+        {completedFiles.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-xl shadow-lg border border-green-100 overflow-hidden"
+          >
+            <div className="p-6 bg-green-50/50 border-b border-green-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-lg font-semibold text-green-900 flex items-center gap-2">
+                  <FileCheck className="text-green-600" size={20} />
+                  Completed Files (
+                  {completedFiles.filter((f) => f.status === "success").length})
+                </h2>
+                <p className="text-sm text-green-700 mt-1">
+                  Total saved:{" "}
+                  {formatBytes(
+                    completedFiles.reduce(
+                      (acc, f) =>
+                        acc +
+                        (f.originalSize - (f.compressedSize || f.originalSize)),
+                      0
+                    )
+                  )}
                 </p>
               </div>
-
-              <div className="grid grid-cols-2 gap-4 mb-8 bg-slate-50 p-6 rounded-lg border border-slate-100">
-                <div className="text-center border-r border-slate-200">
-                  <p className="text-xs uppercase tracking-wide text-slate-500 font-semibold mb-1">
-                    Original
-                  </p>
-                  <p className="text-lg font-medium text-slate-900">
-                    {formatBytes(stats.originalSize)}
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-xs uppercase tracking-wide text-slate-500 font-semibold mb-1">
-                    Compressed
-                  </p>
-                  <p className="text-lg font-bold text-green-600">
-                    {formatBytes(stats.compressedSize)}
-                  </p>
-                </div>
-                <div className="col-span-2 pt-4 border-t border-slate-200 mt-2">
-                  <p className="text-sm text-slate-600">
-                    Saved{" "}
-                    <span className="font-bold text-green-600">
-                      {(
-                        (1 - stats.compressedSize / stats.originalSize) *
-                        100
-                      ).toFixed(1)}
-                      %
-                    </span>{" "}
-                    of file size
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              {completedFiles.some((f) => f.status === "success") && (
                 <Button
-                  onClick={handleDownload}
-                  size="lg"
-                  className="w-full sm:w-auto gap-2"
+                  onClick={downloadAllZip}
+                  disabled={isZipping}
+                  className="bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg transition-all"
                 >
-                  <ArrowDown size={18} />
-                  Download PDF
+                  {isZipping ? (
+                    <Loader2 className="animate-spin mr-2" size={18} />
+                  ) : (
+                    <Archive className="mr-2" size={18} />
+                  )}
+                  Download All as ZIP
                 </Button>
-                <Button
-                  onClick={reset}
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto gap-2"
-                >
-                  <RefreshCw size={18} />
-                  Compress Another
-                </Button>
-              </div>
-            </motion.div>
-          )}
+              )}
+            </div>
 
-          {status === "error" && (
-            <motion.div
-              key="error"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-8"
-            >
-              <div className="p-4 bg-red-100 rounded-full text-red-600 mb-4 inline-block">
-                <AlertCircle size={40} />
-              </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-2">
-                Something went wrong
-              </h3>
-              <p className="text-red-500 mb-6">{errorMessage}</p>
-              <Button onClick={reset} variant="outline">
-                Try Again
-              </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+            <div className="divide-y divide-slate-100">
+              {completedFiles.map((file) => (
+                <div
+                  key={file.id}
+                  className="p-4 hover:bg-slate-50 transition-colors flex items-center justify-between gap-4"
+                >
+                  <div className="flex items-center gap-4 min-w-0">
+                    <div
+                      className={`p-2 rounded-lg ${
+                        file.status === "error"
+                          ? "bg-red-100 text-red-600"
+                          : "bg-green-100 text-green-600"
+                      }`}
+                    >
+                      {file.status === "error" ? (
+                        <AlertCircle size={20} />
+                      ) : (
+                        <FileCheck size={20} />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-slate-900 truncate">
+                        {file.file.name}
+                      </p>
+                      {file.status === "success" ? (
+                        <div className="flex items-center gap-2 text-xs mt-0.5">
+                          <span className="text-slate-500 line-through">
+                            {formatBytes(file.originalSize)}
+                          </span>
+                          <span className="text-green-600 font-medium">
+                            {formatBytes(file.compressedSize || 0)}
+                          </span>
+                          <span className="text-green-600 bg-green-100 px-1.5 py-0.5 rounded text-[10px]">
+                            -
+                            {Math.round(
+                              (1 -
+                                (file.compressedSize || 0) /
+                                  file.originalSize) *
+                                100
+                            )}
+                            %
+                          </span>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-red-500">{file.error}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    {file.status === "success" && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => downloadFile(file)}
+                        className="text-slate-600 hover:text-blue-600 hover:bg-blue-50"
+                      >
+                        <Download size={18} />
+                      </Button>
+                    )}
+                    <button
+                      onClick={() => removeFile(file.id)}
+                      className="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+                    >
+                      <X size={18} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
