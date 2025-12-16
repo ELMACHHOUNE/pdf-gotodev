@@ -59,7 +59,7 @@ self.onmessage = async (e: MessageEvent<File>) => {
                 // Compress to high quality JPEG (0.8)
                 // PDF does not natively support WebP in standard filters (DCTDecode is JPEG).
                 // 0.8 provides a great balance: removes invisible noise but keeps visual sharpness.
-                const compressedBlob = await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.8 });
+                const compressedBlob = await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.7 });
                 const compressedBytes = await compressedBlob.arrayBuffer();
 
                 // Only replace if we save significant space (> 10% reduction)
