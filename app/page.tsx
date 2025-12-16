@@ -1,18 +1,18 @@
 "use client";
-import PdfCompressor from "@/components/pdf-compressor";
-import {
-  ShieldCheck,
-  Zap,
-  Lock,
-  Home as HomeIcon,
-  User,
-  MessageSquare,
-} from "lucide-react";
+import dynamic from "next/dynamic";
+import { ShieldCheck, Zap, Lock, Home as HomeIcon, User } from "lucide-react";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { HoverEffect } from "@/components/ui/card-hover-effect";
 import { Footer } from "@/components/ui/footer";
 import { useI18n } from "@/lib/i18n-context";
+
+const PdfCompressor = dynamic(() => import("@/components/pdf-compressor"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full max-w-5xl mx-auto h-96 bg-white/50 dark:bg-neutral-900/50 backdrop-blur-xl rounded-3xl shadow-xl border border-neutral-200 dark:border-neutral-800 animate-pulse" />
+  ),
+});
 
 export default function Home() {
   const { t } = useI18n();

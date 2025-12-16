@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { formatBytes } from "../utils/pdf-compression";
-import JSZip from "jszip";
 import { useI18n } from "@/lib/i18n-context";
 
 type CompressionStatus = "queued" | "processing" | "success" | "error";
@@ -174,6 +173,7 @@ export default function PdfCompressor() {
 
   const downloadAllZip = async () => {
     setIsZipping(true);
+    const JSZip = (await import("jszip")).default;
     const zip = new JSZip();
     const completedFiles = files.filter(
       (f) => f.status === "success" && f.compressedBlob
