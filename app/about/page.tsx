@@ -58,7 +58,7 @@ export default function About() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-neutral-950 relative w-full">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 relative w-full">
       <div className="fixed inset-0 z-0 pointer-events-none">
         <BackgroundBeams />
       </div>
@@ -67,8 +67,8 @@ export default function About() {
 
       <main className="container mx-auto px-4 pt-32 pb-20 md:py-32 relative z-10">
         <div className="text-center max-w-4xl mx-auto mb-16 space-y-8">
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white">
-            <span className="block text-slate-900 dark:text-white mb-2">
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-neutral-900 dark:text-white">
+            <span className="block text-neutral-900 dark:text-white mb-2">
               {t.about.title}
             </span>
             <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-500">
@@ -76,13 +76,13 @@ export default function About() {
             </span>
           </h1>
 
-          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto leading-relaxed">
             {t.about.description}
           </p>
         </div>
 
         <div className="mt-16 max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-slate-900 dark:text-white mb-12">
+          <h2 className="text-3xl font-bold text-center text-neutral-900 dark:text-white mb-12">
             {t.about.ecosystem}
           </h2>
           <HoverEffect items={tools} />

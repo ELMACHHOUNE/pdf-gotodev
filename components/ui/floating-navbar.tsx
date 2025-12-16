@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
 import { LanguageToggle } from "./language-toggle";
+import { ModeToggle } from "./theme-toggle";
 
 export const FloatingNav = ({
   navItems,
@@ -65,11 +66,19 @@ export const FloatingNav = ({
       >
         <Link href="/" className="flex items-center gap-2 mr-4">
           <Image
-            src="/images/icon-for-dark.webp"
+            src="/images/logo.webp"
             alt="GoToDev Logo"
             width={120}
             height={40}
-            className="h-8 w-auto object-contain"
+            className="h-8 w-auto object-contain dark:hidden"
+            priority
+          />
+          <Image
+            src="/images/logo-dark.webp"
+            alt="GoToDev Logo"
+            width={120}
+            height={40}
+            className="h-8 w-auto object-contain hidden dark:block"
             priority
           />
         </Link>
@@ -86,6 +95,7 @@ export const FloatingNav = ({
           </Link>
         ))}
         <LanguageToggle />
+        <ModeToggle />
       </motion.div>
     </AnimatePresence>
   );

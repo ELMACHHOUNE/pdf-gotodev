@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { GoToDevButton } from "@/components/ui/gotodev-button";
 import { I18nProvider } from "@/lib/i18n-context";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/next";
 export const metadata: Metadata = {
   metadataBase: new URL("https://pdf.gotodev.ma"),
@@ -77,12 +78,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={``} suppressHydrationWarning>
-        <I18nProvider>
-          {children}
-          <GoToDevButton />
-        </I18nProvider>
-        <Analytics />
+      <body
+        className={`antialiased bg-background text-foreground`}
+        suppressHydrationWarning
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <I18nProvider>
+            {children}
+            <GoToDevButton />
+          </I18nProvider>
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );

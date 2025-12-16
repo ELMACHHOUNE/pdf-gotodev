@@ -21,11 +21,18 @@ export function Footer() {
         <div className="flex flex-col items-center text-center">
           <div className="flex items-center gap-2 mb-4">
             <Image
+              src="/images/icon.webp"
+              alt="GoToDev Logo"
+              width={48}
+              height={48}
+              className="h-12 w-12 object-contain dark:hidden"
+            />
+            <Image
               src="/images/icon-for-dark.webp"
               alt="GoToDev Logo"
               width={48}
               height={48}
-              className="h-12 w-12 object-contain"
+              className="h-12 w-12 object-contain hidden dark:block"
             />
             <h3 className="text-2xl font-bold text-neutral-900 dark:text-white">
               GoToDev

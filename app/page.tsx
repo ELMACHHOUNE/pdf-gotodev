@@ -49,7 +49,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-neutral-950 relative w-full">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 relative w-full">
       <div className="fixed inset-0 z-0 pointer-events-none">
         <BackgroundBeams />
       </div>
@@ -63,8 +63,8 @@ export default function Home() {
             <span>{t.hero.badge}</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white">
-            <span className="block text-slate-900 dark:text-white mb-2">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-neutral-900 dark:text-white">
+            <span className="block text-neutral-900 dark:text-white mb-2">
               {t.hero.title_prefix}
             </span>
             <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-500">
@@ -72,7 +72,7 @@ export default function Home() {
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed px-4 md:px-0">
+          <p className="text-lg md:text-xl text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto leading-relaxed px-4 md:px-0">
             {t.hero.description}
           </p>
         </div>

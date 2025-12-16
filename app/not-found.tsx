@@ -30,28 +30,30 @@ export default function NotFound() {
   }, [router]);
 
   return (
-    <div className="h-screen w-full bg-neutral-950 relative flex flex-col items-center justify-center antialiased overflow-hidden">
+    <div className="h-screen w-full bg-slate-50 dark:bg-neutral-950 relative flex flex-col items-center justify-center antialiased overflow-hidden">
       <div className="max-w-2xl mx-auto p-4 relative z-10 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-9xl font-bold bg-clip-text text-transparent bg-linear-to-b from-neutral-200 to-neutral-600 mb-8">
+          <h1 className="text-9xl font-bold bg-clip-text text-transparent bg-linear-to-b from-neutral-800 to-neutral-400 dark:from-neutral-200 dark:to-neutral-600 mb-8">
             404
           </h1>
-          <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-2xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
             {t.not_found.title}
           </h2>
-          <p className="text-neutral-400 text-lg mb-8 max-w-lg mx-auto">
+          <p className="text-neutral-600 dark:text-neutral-400 text-lg mb-8 max-w-lg mx-auto">
             {t.not_found.description_start}{" "}
-            <span className="text-blue-500 font-bold">{countdown}</span>{" "}
+            <span className="text-blue-600 dark:text-blue-500 font-bold">
+              {countdown}
+            </span>{" "}
             {t.not_found.description_end}
           </p>
 
           <div className="flex justify-center gap-4">
             <Link href="/">
-              <Button className="bg-white text-black hover:bg-neutral-200 transition-colors flex items-center gap-2">
+              <Button className="bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200 transition-colors flex items-center gap-2">
                 <Home size={18} />
                 {t.not_found.button}
               </Button>
