@@ -64,7 +64,11 @@ export const FloatingNav = ({
           className
         )}
       >
-        <Link href="/" className="flex items-center gap-2 mr-4">
+        <Link
+          href="/"
+          className="flex items-center gap-2 mr-4"
+          aria-label="Home"
+        >
           <Image
             src="/images/icon.webp"
             alt="GoToDev Logo"
@@ -86,6 +90,7 @@ export const FloatingNav = ({
           <Link
             key={navItem.link}
             href={navItem.link}
+            aria-label={navItem.name}
             className={cn(
               "relative dark:text-neutral-50 items-center flex space-x-2 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 text-base font-medium"
             )}
