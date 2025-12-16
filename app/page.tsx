@@ -1,9 +1,13 @@
 "use client";
 import dynamic from "next/dynamic";
 import { ShieldCheck, Zap, Lock, Home as HomeIcon, User } from "lucide-react";
-import { FloatingNav } from "@/components/ui/floating-navbar";
 import { useI18n } from "@/lib/i18n-context";
 
+const FloatingNav = dynamic(
+  () =>
+    import("@/components/ui/floating-navbar").then((mod) => mod.FloatingNav),
+  { ssr: false }
+);
 const BackgroundBeams = dynamic(
   () =>
     import("@/components/ui/background-beams").then(
