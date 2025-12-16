@@ -28,13 +28,6 @@ export default function About() {
       link: "/about",
       icon: <User className="h-4 w-4 text-neutral-500 dark:text-white" />,
     },
-    {
-      name: t.nav.contact,
-      link: "/contact",
-      icon: (
-        <MessageSquare className="h-4 w-4 text-neutral-500 dark:text-white" />
-      ),
-    },
   ];
 
   const tools = [

@@ -1,8 +1,7 @@
 {
   "nav": {
     "home": "Home",
-    "about": "About",
-    "contact": "Contact"
+    "about": "About"
   },
   "hero": {
     "badge": "100% Client-Side • No Server Uploads",

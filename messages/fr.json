@@ -1,8 +1,7 @@
 {
   "nav": {
     "home": "Accueil",
-    "about": "À propos",
-    "contact": "Contact"
+    "about": "À propos"
   },
   "hero": {
     "badge": "100% Côté Client • Aucun Téléchargement Serveur",
