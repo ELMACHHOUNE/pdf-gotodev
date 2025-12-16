@@ -1,6 +1,12 @@
 "use client";
 import React from "react";
-import { Github, Twitter, Linkedin } from "lucide-react";
+import {
+  Github,
+  Linkedin,
+  Facebook,
+  Instagram,
+  MessageCircle,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -63,22 +69,39 @@ export function Footer() {
 
           <div className="flex space-x-6 mb-8">
             <Link
-              href="#"
+              href="https://github.com/ELMACHHOUNE/pdf-gotodev"
+              target="_blank"
               className="text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors transform hover:scale-110"
             >
               <Github size={24} />
             </Link>
             <Link
-              href="#"
-              className="text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors transform hover:scale-110"
-            >
-              <Twitter size={24} />
-            </Link>
-            <Link
-              href="#"
+              href="https://www.linkedin.com/company/gotodev-ma/"
+              target="_blank"
               className="text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors transform hover:scale-110"
             >
               <Linkedin size={24} />
+            </Link>
+            <Link
+              href="https://www.instagram.com/gotodev.ma"
+              target="_blank"
+              className="text-neutral-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors transform hover:scale-110"
+            >
+              <Instagram size={24} />
+            </Link>
+            <Link
+              href="https://www.facebook.com/gotodev.ma"
+              target="_blank"
+              className="text-neutral-400 hover:text-blue-800 dark:hover:text-blue-600 transition-colors transform hover:scale-110"
+            >
+              <Facebook size={24} />
+            </Link>
+            <Link
+              href="https://wa.me/+212649455082"
+              target="_blank"
+              className="text-neutral-400 hover:text-green-600 dark:hover:text-green-400 transition-colors transform hover:scale-110"
+            >
+              <MessageCircle size={24} />
             </Link>
           </div>
         </div>
