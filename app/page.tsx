@@ -2,10 +2,24 @@
 import dynamic from "next/dynamic";
 import { ShieldCheck, Zap, Lock, Home as HomeIcon, User } from "lucide-react";
 import { FloatingNav } from "@/components/ui/floating-navbar";
-import { BackgroundBeams } from "@/components/ui/background-beams";
-import { HoverEffect } from "@/components/ui/card-hover-effect";
-import { Footer } from "@/components/ui/footer";
 import { useI18n } from "@/lib/i18n-context";
+
+const BackgroundBeams = dynamic(
+  () =>
+    import("@/components/ui/background-beams").then(
+      (mod) => mod.BackgroundBeams
+    ),
+  { ssr: false }
+);
+const HoverEffect = dynamic(
+  () =>
+    import("@/components/ui/card-hover-effect").then((mod) => mod.HoverEffect),
+  { ssr: false }
+);
+const Footer = dynamic(
+  () => import("@/components/ui/footer").then((mod) => mod.Footer),
+  { ssr: false }
+);
 
 const PdfCompressor = dynamic(() => import("@/components/pdf-compressor"), {
   ssr: false,
