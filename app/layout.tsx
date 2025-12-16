@@ -42,9 +42,9 @@ export const metadata: Metadata = {
     siteName: "GoToDev PDF Compressor",
     images: [
       {
-        url: "/images/logo.webp",
+        url: "/images/icon.webp",
         width: 1200,
-        height: 630,
+        height: 1200,
         alt: "GoToDev PDF Compressor",
       },
     ],
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     title: "Compress PDF Online - Secure & Client-Side | GoToDev",
     description:
       "Compress PDF files instantly in your browser. 100% client-side, secure, and free.",
-    images: ["/images/logo.webp"],
+    images: ["/images/icon.webp"],
     creator: "@GoToDev",
   },
   robots: {
