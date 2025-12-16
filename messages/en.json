@@ -54,5 +54,11 @@
     "total_saved": "Total space saved:",
     "clear_all": "Clear All",
     "download_all": "Download All (ZIP)"
+  },
+  "not_found": {
+    "title": "Page Not Found",
+    "description_start": "The page you are looking for doesn't exist or has been moved. Redirecting you to the homepage in",
+    "description_end": "seconds...",
+    "button": "Go Home Now"
   }
 }

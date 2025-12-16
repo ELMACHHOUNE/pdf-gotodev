@@ -54,5 +54,11 @@
     "total_saved": "Espace total économisé :",
     "clear_all": "Tout effacer",
     "download_all": "Tout télécharger (ZIP)"
+  },
+  "not_found": {
+    "title": "Page Non Trouvée",
+    "description_start": "La page que vous recherchez n'existe pas ou a été déplacée. Redirection vers l'accueil dans",
+    "description_end": "secondes...",
+    "button": "Retour à l'accueil"
   }
 }
