@@ -36,11 +36,19 @@ self.onmessage = async (e: MessageEvent<File>) => {
             const bitmap = await createImageBitmap(blob);
 
             // Check if image is large enough to warrant compression
-            if (bitmap.width > 1000 || bitmap.height > 1000) {
-              // Resize logic: Scale down to max 1000px dimension
-              const scale = Math.min(1000 / bitmap.width, 1000 / bitmap.height);
-              const newWidth = Math.round(bitmap.width * scale);
-              const newHeight = Math.round(bitmap.height * scale);
+            // We use a higher threshold (2000px) to preserve detail for printing/viewing
+            const MAX_DIM = 2000;
+            
+            if (bitmap.width > 500 || bitmap.height > 500) {
+              let newWidth = bitmap.width;
+              let newHeight = bitmap.height;
+
+              // Only resize if it exceeds the max dimension
+              if (bitmap.width > MAX_DIM || bitmap.height > MAX_DIM) {
+                const scale = Math.min(MAX_DIM / bitmap.width, MAX_DIM / bitmap.height);
+                newWidth = Math.round(bitmap.width * scale);
+                newHeight = Math.round(bitmap.height * scale);
+              }
 
               // Draw to OffscreenCanvas
               const canvas = new OffscreenCanvas(newWidth, newHeight);
@@ -48,12 +56,15 @@ self.onmessage = async (e: MessageEvent<File>) => {
               if (ctx) {
                 ctx.drawImage(bitmap, 0, 0, newWidth, newHeight);
                 
-                // Compress to lower quality JPEG
-                const compressedBlob = await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.5 });
+                // Compress to high quality JPEG (0.8)
+                // PDF does not natively support WebP in standard filters (DCTDecode is JPEG).
+                // 0.8 provides a great balance: removes invisible noise but keeps visual sharpness.
+                const compressedBlob = await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.8 });
                 const compressedBytes = await compressedBlob.arrayBuffer();
 
-                // Only replace if we actually saved space
-                if (compressedBytes.byteLength < imageBytes.byteLength) {
+                // Only replace if we save significant space (> 10% reduction)
+                // This prevents degrading quality for negligible gains
+                if (compressedBytes.byteLength < imageBytes.byteLength * 0.9) {
                   // Update the stream contents
                   // We need to create a new stream with the new data but keep other props (mostly)
                   // Actually, we just update the contents and the Width/Height in the dict
