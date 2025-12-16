@@ -1,0 +1,19 @@
+{
+  "name": "GoToDev PDF Compressor",
+  "short_name": "PDF Compressor",
+  "description": "Compress PDF files instantly in your browser. 100% client-side, secure, and free.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/images/icon.webp",
+      "sizes": "any",
+      "type": "image/webp"
+    }
+  ],
+  "categories": ["web", "pdf", "tools", "productivity"]
+}
