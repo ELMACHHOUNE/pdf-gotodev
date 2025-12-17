@@ -17,7 +17,7 @@ export const HoverEffect = ({
   }[];
   className?: string;
 }) => {
-  let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <div
@@ -50,13 +50,29 @@ export const HoverEffect = ({
               />
             )}
           </AnimatePresence>
-          <Card>
-            <div className="p-4 w-12 h-12 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4">
-              {item.icon}
-            </div>
-            <CardTitle>{item.title}</CardTitle>
-            <CardDescription>{item.description}</CardDescription>
-          </Card>
+          {item.link ? (
+            <Link
+              href={item.link}
+              target="_blank"
+              className="block h-full w-full"
+            >
+              <Card>
+                <div className="p-4 w-12 h-12 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4">
+                  {item.icon}
+                </div>
+                <CardTitle>{item.title}</CardTitle>
+                <CardDescription>{item.description}</CardDescription>
+              </Card>
+            </Link>
+          ) : (
+            <Card>
+              <div className="p-4 w-12 h-12 bg-blue-50 dark:bg-blue-900/20 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4">
+                {item.icon}
+              </div>
+              <CardTitle>{item.title}</CardTitle>
+              <CardDescription>{item.description}</CardDescription>
+            </Card>
+          )}
         </div>
       ))}
     </div>
