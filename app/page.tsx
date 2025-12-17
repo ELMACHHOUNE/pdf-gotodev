@@ -76,7 +76,7 @@ export default function Home() {
 
       <main className="container mx-auto px-4 pt-32 pb-12 md:py-32 relative z-10">
         <div className="text-center max-w-4xl mx-auto mb-12 md:mb-16 space-y-6 md:space-y-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-blue-50/80 backdrop-blur-sm text-blue-700 text-xs md:text-sm font-medium border border-blue-100 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-blue-100/80 dark:bg-blue-900/30 backdrop-blur-sm text-blue-800 dark:text-blue-200 text-xs md:text-sm font-medium border border-blue-200 dark:border-blue-800 shadow-sm">
             <ShieldCheck size={14} className="md:w-4 md:h-4" />
             <span>{t.hero.badge}</span>
           </div>
