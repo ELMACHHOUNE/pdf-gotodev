@@ -60,39 +60,39 @@ export const FloatingNav = ({
           duration: 0.2,
         }}
         className={cn(
-          "flex max-w-fit fixed top-10 inset-x-0 mx-auto border border-transparent dark:border-white/20 rounded-full dark:bg-black bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-50 px-8 py-4 items-center justify-center space-x-6",
+          "flex max-w-fit fixed top-10 inset-x-0 mx-auto border border-transparent dark:border-white/20 rounded-full dark:bg-black bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-50 px-10 py-5 items-center justify-center space-x-8",
           className
         )}
       >
         <Link
           href="/"
-          className="flex items-center gap-2 mr-4"
+          className="flex items-center gap-2 mr-6"
           aria-label="Home"
         >
           <Image
             src="/images/icon.webp"
             alt="GoToDev Logo"
-            width={120}
-            height={40}
-            className="h-8 w-auto object-contain dark:hidden"
+            width={140}
+            height={48}
+            className="h-10 w-auto object-contain dark:hidden"
             priority
           />
           <Image
             src="/images/icon-for-dark.webp"
             alt="GoToDev Logo"
-            width={120}
-            height={40}
-            className="h-8 w-auto object-contain hidden dark:block"
+            width={140}
+            height={48}
+            className="h-10 w-auto object-contain hidden dark:block"
             priority
           />
         </Link>
-        {navItems.map((navItem, idx: number) => (
+        {navItems.map((navItem) => (
           <Link
             key={navItem.link}
             href={navItem.link}
             aria-label={navItem.name}
             className={cn(
-              "relative dark:text-neutral-50 items-center flex space-x-2 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 text-base font-medium"
+              "relative dark:text-neutral-50 items-center flex space-x-2 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500 text-lg font-medium"
             )}
           >
             <span className="block sm:hidden">{navItem.icon}</span>
